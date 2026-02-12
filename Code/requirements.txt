@@ -1,0 +1,11 @@
+torch
+transformers
+pandas
+numpy
+scikit-learn
+dateparser
+matplotlib
+seaborn
+tqdm
+openai
+accelerate
