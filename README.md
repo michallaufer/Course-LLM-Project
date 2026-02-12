@@ -8,24 +8,6 @@
 
 ---
 
-## Table of Contents
-- [Project Motivation](#project-motivation)
-- [Problem Statement](#problem-statement)
-- [Method Overview](#method-overview)
-- [Dataset](#dataset)
-- [Repository Structure](#repository-structure)
-- [Quickstart](#quickstart)
-- [Training](#training)
-- [Inference](#inference)
-- [Evaluation](#evaluation)
-- [Results Summary](#results-summary)
-- [Stress Tests](#stress-tests)
-- [Ethics & Data Privacy](#ethics--data-privacy)
-- [Limitations](#limitations)
-- [Citation](#citation)
-
----
-
 ## Project Motivation
 Clinical outpatient notes often contain follow‑up instructions such as:
 
@@ -62,7 +44,25 @@ This decomposes into:
 4) **Date normalization** anchored to `visit_date`
 
 ---
+## Visual Abstract
 
+The system consists of:
+
+Clinical Note
+↓
+Sliding Window Tokenization
+↓
+BioBERT Encoder
+↓
+Head A: BIO NER (Action/Time spans)
+↓
+Head B: Biaffine Linker (Action→Time)
+↓
+Date Normalization (visit_date anchored)
+↓
+Structured JSON Output
+
+---
 ## Method Overview
 We implement a **joint multi‑task architecture** with a shared **BioBERT** encoder feeding two heads:
 
@@ -103,6 +103,35 @@ Clinical notes can exceed 512 tokens, so we use **sliding windows**:
 - `DOC_STRIDE = 128`
 
 The overlap reduces boundary truncation and preserves context around entities.
+
+---
+## Data Augmentation & Generation Methods
+
+We applied:
+
+Template randomization
+
+Section reordering
+
+Multi-action injection
+
+History distractors
+
+Clinical shorthand generation (x2w, q6mo, RTC 3mo)
+
+Surface-form variation (weeks vs days vs months)
+
+Stress-test subsets include:
+
+Proximity traps
+
+List-swapping traps
+
+History traps
+
+Section ambiguity
+
+Shorthand temporal noise
 
 ---
 
